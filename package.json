@@ -1,0 +1,37 @@
+{
+  "name": "grokbot-guide",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GrokBot Guide：Grok Bot 中文教程与实战指南",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs --host 0.0.0.0 --port 8080",
+    "docs:build": "vuepress build docs",
+    "docs:clean": "rm -rf docs/.vuepress/.cache docs/.vuepress/.temp docs/.vuepress/dist",
+    "dev": "npm run docs:dev",
+    "build": "npm run docs:build",
+    "preview": "npm run docs:dev"
+  },
+  "devDependencies": {
+    "@vuepress/bundler-vite": "2.0.0-rc.31",
+    "@vuepress/plugin-markdown-container": "2.0.0-rc.137",
+    "@vuepress/plugin-reading-time": "2.0.0-rc.137",
+    "@vuepress/plugin-seo": "2.0.0-rc.137",
+    "@vuepress/plugin-sitemap": "2.0.0-rc.137",
+    "@vuepress/plugin-slimsearch": "2.0.0-rc.137",
+    "sass-embedded": "^1.105.0",
+    "vue": "^3.5",
+    "vuepress": "2.0.0-rc.31"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sass",
+      "sass-embedded"
+    ]
+  }
+}

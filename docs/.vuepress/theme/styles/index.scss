@@ -1,0 +1,1448 @@
+// GrokBot Guide — global theme styles
+// Design tokens live in ./tokens.css (PRD v0.4 §9) and are loaded first.
+
+@use './tokens.css';
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: local('Noto Sans SC'), local('Noto Sans CJK SC');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+}
+
+// global focus ring — one visible ring for every interactive element
+:focus-visible {
+  outline: 2px solid #0a0a0a;
+  outline-offset: 2px;
+}
+
+// ---------------------------------------------------------------------------
+// vuepress / slimsearch tokens
+// The stock vuepress theme is not used, so the search plugin's own custom
+// properties are never defined. Without them the search modal renders with a
+// transparent background and the default browser highlight colours.
+// ---------------------------------------------------------------------------
+:root {
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-alt: #f7f6f3;
+  --vp-c-text: #0a0a0a;
+  --vp-c-text-mute: #6b6b6b;
+  --vp-c-border: #d5d9e4;
+  --vp-c-border-hard: #d5d9e4;
+  --vp-c-shadow: rgba(0, 0, 0, 0.08);
+  --vp-c-accent: #0a0a0a;
+  --vp-c-accent-bg: #0a0a0a;
+  --vp-c-accent-hover: #2a2a2a;
+  --vp-c-white: #ffffff;
+  --vp-c-control: #f1f1f1;
+  --vp-c-control-hover: #e8e8e8;
+  --vp-t-color: 0.15s ease;
+  --vp-t-transform: 0.18s ease;
+}
+
+.g-wrap {
+  min-height: calc(100vh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+}
+
+.g-main {
+  flex: 1;
+}
+
+// skip link (visually hidden until focused)
+.g-skip,
+.g-skip-link {
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--white);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+
+  &:focus,
+  &:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+// hidden search trigger — keeps the slimsearch hotkeys (Ctrl/⌘ K) on every page
+.g-search-hotkey {
+  display: none;
+}
+
+// ---------------------------------------------------------------------------
+// search modal (slimsearch) — monochrome, matched to the site chrome.
+//
+// The plugin ships its own stylesheet, and part of it is injected *after*
+// this file. Every override is therefore scoped under `.vp-search-modal` so
+// it outranks the plugin rules on specificity, not just on order.
+// ---------------------------------------------------------------------------
+.vp-search-modal {
+  background: #ffffff;
+  border: 1px solid #d5d9e4;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+
+  // query field
+  .vp-search-box {
+    margin: 16px;
+
+    label {
+      color: #6b6b6b;
+    }
+
+    .vp-search-input {
+      font-size: 15px;
+      line-height: 22px;
+      padding-block: 11px;
+      border: 1px solid #d5d9e4;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #0a0a0a;
+      box-shadow: none;
+    }
+
+    .vp-search-clear-button {
+      color: #6b6b6b;
+    }
+  }
+
+  // suggestions — an opaque dropdown floating above the result list
+  .vp-search-suggestions {
+    z-index: 20;
+    max-height: 128px;
+    background: #ffffff;
+    border: 1px solid #d5d9e4;
+    border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    overflow: hidden auto;
+
+    .vp-search-suggestion {
+      border-top: 1px solid #d5d9e4;
+      color: #0a0a0a;
+
+      &:first-child {
+        border-top: none;
+      }
+
+      &.active,
+      &:hover {
+        background-color: #f0f1f6;
+      }
+    }
+  }
+
+  // results
+  .vp-search-record {
+    border-radius: 8px;
+
+    &.active,
+    &:hover {
+      background: #f0f1f6;
+    }
+  }
+
+  .vp-search-record-title {
+    position: static;
+    z-index: auto;
+    margin: 0 0 6px;
+    padding: 0;
+    text-indent: 0;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #0a0a0a;
+  }
+
+  .vp-search-record-content {
+    font-size: 13.5px;
+    color: #6b6b6b;
+  }
+
+  // highlighted matches — never the browser default yellow
+  .vp-search-record-matches {
+    margin: 0 0 6px;
+    padding: 0 2px;
+    background: #f0f1f6;
+    color: #6b6b6b;
+    border-radius: 4px;
+    box-shadow: none;
+    font-weight: 400;
+
+    &:hover,
+    &.active {
+      background-color: #f0f1f6;
+      color: #6b6b6b;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    strong {
+      color: #0a0a0a;
+    }
+
+    .vp-search-record-type {
+      margin-inline-start: 0;
+      color: #6b6b6b;
+    }
+
+    mark {
+      background: #f0f1f6;
+      color: #0a0a0a;
+      border-radius: 4px;
+      padding: 0 2px;
+    }
+  }
+
+  mark {
+    background: #f0f1f6;
+    color: #0a0a0a;
+    border-radius: 4px;
+    padding: 0 2px;
+  }
+}
+
+// dim the page behind the modal
+.vp-search-mask {
+  background: rgba(10, 10, 10, 0.25);
+}
+
+// the suggestion dropdown floats over the list — reserve the space it needs
+// so it never sits on top of the result text
+.vp-search-modal:has(.vp-search-suggestions) .vp-search-result-wrapper {
+  min-height: 0;
+  padding-top: 118px;
+}
+
+// ---------------------------------------------------------------------------
+// pills (PRD v0.4 §9.10)
+// ---------------------------------------------------------------------------
+.g-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-ui);
+  background: var(--pill);
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background: var(--pill-hover);
+  }
+}
+
+.g-pill--dark {
+  background: var(--ink);
+  color: var(--white);
+
+  &:hover {
+    background: var(--ink-hover);
+  }
+}
+
+.g-pill--ghost {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--dove);
+
+  &:hover {
+    background: var(--pill);
+  }
+}
+
+.g-pill--sm {
+  min-height: 30px;
+  font-size: 12.5px;
+  padding: 5px 14px;
+}
+
+// ---------------------------------------------------------------------------
+// header (PRD v0.4 §6.1.1)
+// ---------------------------------------------------------------------------
+.g-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--header-h);
+  box-sizing: border-box;
+  border-bottom: 1px solid transparent;
+
+  // The translucent bg + blur live on a pseudo-element so .g-header itself
+  // never has backdrop-filter. On WebKit/iOS a backdrop-filter element is the
+  // containing block for position:fixed descendants (that collapsed the mobile
+  // menu panel to ~1px). Keep it this way even though the panel is now a sibling.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 -1px; // -1px: also paint under the 1px bottom border, as the old border-box bg did
+    z-index: -1;
+    background: var(--header-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    pointer-events: none;
+  }
+}
+
+.g-header__inner {
+  height: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.g-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--inter);
+  font-weight: 700;
+  letter-spacing: var(--ls-logo);
+  color: var(--ink);
+}
+
+.g-logo__text {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: var(--ls-logo);
+  line-height: 1.2;
+}
+
+.g-logo .g-botmark {
+  --bm-size: 40px;
+}
+
+.g-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  .g-nav__link {
+    font-size: 15px;
+    color: var(--mut);
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--ink);
+    }
+
+    &.is-active {
+      color: var(--ink);
+      font-weight: var(--fw-medium);
+    }
+  }
+}
+
+// header pills — slightly larger to match enlarged nav
+.g-header .g-pill {
+  height: 34px;
+  min-height: 34px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  line-height: 18px;
+  border-radius: var(--r-pill);
+}
+
+.g-pill--github {
+  font-family: var(--inter);
+}
+
+.g-menu-btn {
+  display: none;
+  position: relative;
+  z-index: 60;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 44px;
+  height: 44px;
+  padding: 12px 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  span {
+    display: block;
+    height: 1.6px;
+    border-radius: 2px;
+    background: var(--ink);
+    pointer-events: none;
+  }
+}
+
+.g-mobile-panel {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 55;
+  overflow-y: auto;
+  border-top: 1px solid var(--dove);
+  background: var(--white);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+
+  &[hidden] {
+    display: none !important;
+  }
+
+  .g-mobile-panel__link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--gutter);
+    font-size: 15px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--dove);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.is-active {
+      font-weight: var(--fw-medium);
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .g-header {
+    height: var(--header-h);
+  }
+
+  .g-logo {
+    gap: 8px;
+  }
+
+  .g-logo__text {
+    font-size: 19px;
+  }
+
+  .g-logo .g-botmark {
+    --bm-size: 34px;
+  }
+
+  .g-header .g-nav__link,
+  .g-header .g-pill--github,
+  .g-header .g-pill--dark {
+    display: none;
+  }
+
+  .g-header .g-nav {
+    display: none;
+  }
+
+  .g-header__inner {
+    gap: 12px;
+  }
+
+  .g-menu-btn {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .g-mobile-panel.is-open {
+    display: flex;
+  }
+
+  // page scroll lock while the panel is open (class toggled by SiteHeader.vue).
+  // Only on <html> (propagates to the viewport): also hiding body's overflow
+  // would make <body> a scroll container and un-stick the sticky header.
+  html.g-menu-lock {
+    overflow: hidden;
+  }
+
+  .g-header.is-menu-open {
+    height: var(--header-h);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// footer (PRD v0.4 §6.1.2)
+// ---------------------------------------------------------------------------
+.g-footer {
+  padding: 48px var(--gutter) 48px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.g-footer__line {
+  height: 1px;
+  background: var(--dove);
+  margin-bottom: 24px;
+}
+
+.g-footer__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--fog);
+}
+
+.g-footer__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.g-footer__right {
+  display: flex;
+  gap: 24px;
+
+  a {
+    color: var(--fog);
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--ink);
+    }
+  }
+}
+
+.g-footer__github {
+  font-family: var(--inter);
+}
+
+// ---------------------------------------------------------------------------
+// docs layout
+// ---------------------------------------------------------------------------
+.g-wrap--docs {
+  align-items: stretch;
+}
+
+.g-docs {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  // top padding = sticky gap under header so sidebars stick immediately (no scroll buffer)
+  padding: 16px var(--gutter) 24px;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.g-docs__toggle {
+  display: none;
+}
+
+.g-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  padding-top: 4px;
+  position: sticky;
+  top: calc(var(--header-h) + 16px);
+  max-height: calc(100vh - var(--header-h) - 16px - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+// slimsearch entry — sits at the top of the docs sidebar (PRD v0.4 §6.1.3)
+.g-sidebar .vp-search-button {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  height: 34px;
+  min-height: 34px;
+  padding: 0 12px;
+  margin: 0 0 12px;
+  gap: 8px;
+  border-radius: var(--r-pill);
+  background: var(--pill);
+  border: 0;
+  box-shadow: none;
+  font-size: 13px;
+  color: var(--fog);
+
+  &:hover {
+    background: var(--pill-hover);
+    box-shadow: none;
+  }
+
+  .vp-search-placeholder {
+    padding: 0;
+    font-size: 13px;
+    color: var(--fog);
+  }
+
+  .vp-search-key-hints {
+    display: none;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--fog);
+  }
+}
+
+.g-sidegroup__label {
+  font-family: var(--inter);
+  font-size: 15.5px;
+  color: #0A0A0A;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 20px 12px 10px;
+}
+
+.g-sidelink {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: var(--mut);
+  margin: 2px 0;
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  &.is-active {
+    background: var(--nim);
+    color: var(--ink);
+    font-weight: 500;
+  }
+}
+
+.g-article {
+  flex: 1;
+  max-width: 680px;
+  background: var(--white);
+  border: 1px solid var(--dove);
+  border-radius: var(--r16);
+  padding: 40px;
+  min-width: 0;
+}
+
+.g-eyebrow {
+  font-size: 12px;
+  color: var(--fog);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  font-family: var(--inter);
+}
+
+.g-title {
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin: 14px 0 10px;
+}
+
+.g-meta {
+  font-size: 13px;
+  color: var(--fog);
+  margin-bottom: 22px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.g-hr {
+  height: 1px;
+  background: var(--dove);
+  margin: 32px 0 20px;
+}
+
+.g-prevnext {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.g-prevnext__link {
+  display: block;
+
+  &--right {
+    text-align: right;
+    margin-left: auto;
+  }
+}
+
+.g-prevnext__label {
+  display: block;
+  font-size: 12px;
+  color: var(--fog);
+  margin-bottom: 4px;
+}
+
+.g-prevnext__text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.g-edit {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 12.5px;
+  color: var(--fog);
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+// TOC
+.g-toc {
+  width: 160px;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-top: 12px;
+  position: sticky;
+  top: calc(var(--header-h) + 16px);
+}
+
+.g-toc__title {
+  font-family: var(--inter);
+  font-size: 11.5px;
+  color: var(--fog);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
+
+.g-toc__link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 12.5px;
+  color: var(--fog);
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  &.is-active {
+    color: var(--ink);
+  }
+
+  &.is-h3 {
+    padding-left: 14px;
+  }
+}
+
+.g-toc__bar {
+  width: 2px;
+  height: 14px;
+  border-radius: 1px;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.g-toc__link.is-active .g-toc__bar {
+  background: var(--ink);
+}
+
+// ---------------------------------------------------------------------------
+// responsive: docs
+// ---------------------------------------------------------------------------
+@media (max-width: 1100px) {
+  .g-toc {
+    display: none;
+  }
+
+  .g-article {
+    max-width: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .g-docs {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 20px 16px 16px;
+  }
+
+  // the outline toggle lives above the article card, not inside it
+  .g-docs__toggle {
+    display: inline-flex;
+    align-self: flex-start;
+    order: 1;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--pill);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .g-sidebar {
+    display: none;
+    order: 2;
+  }
+
+  .g-docs.is-side-open .g-sidebar {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background: var(--white);
+    border: 1px solid var(--dove);
+    border-radius: 16px;
+    // undo desktop sticky so the collapsible outline stays in document flow
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .g-article {
+    order: 3;
+    flex: none;
+    padding: 24px 20px;
+  }
+
+  .g-title {
+    font-size: 26px;
+    line-height: 1.3;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// article prose
+// ---------------------------------------------------------------------------
+.g-prose {
+  color: var(--body);
+
+  h2 {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 28px 0 14px;
+    color: var(--ink);
+    scroll-margin-top: calc(var(--header-h) + 16px);
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 22px 0 10px;
+    color: var(--ink);
+    scroll-margin-top: calc(var(--header-h) + 16px);
+  }
+
+  // header anchors: the heading text itself is the link — keep it clean
+  h2 a,
+  h3 a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  h2 a::after,
+  h3 a::after {
+    content: '#';
+    margin-left: 6px;
+    font-weight: 400;
+    color: var(--fog);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  h2:hover a::after,
+  h3:hover a::after,
+  h2 a:focus-visible::after,
+  h3 a:focus-visible::after {
+    opacity: 1;
+  }
+
+  p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--body);
+    margin: 0 0 14px;
+  }
+
+  ul {
+    margin: 0 0 14px;
+    padding-left: 20px;
+    list-style: disc;
+  }
+
+  ol {
+    margin: 0 0 14px;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: g-ol;
+  }
+
+  li {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--body);
+    margin-bottom: 10px;
+  }
+
+  // ordered items keep the grey Inter number in an absolutely positioned
+  // marker — a flex row would split **bold** / `code` into extra columns
+  ol > li {
+    display: block;
+    position: relative;
+    padding-left: 30px;
+
+    &::before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      counter-increment: g-ol;
+      content: counter(g-ol) '.';
+      color: var(--fog);
+      font-weight: 500;
+      font-family: var(--inter);
+    }
+  }
+
+  a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--fog);
+
+    &:hover {
+      text-decoration-color: var(--ink);
+    }
+  }
+
+  strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  blockquote {
+    margin: 0 0 14px;
+    padding: 2px 0 2px 14px;
+    border-left: 2px solid var(--dove);
+    color: var(--mut);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 0 0 16px;
+
+    th,
+    td {
+      border: 1px solid var(--dove);
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--ivory);
+      font-weight: 500;
+      color: var(--ink);
+    }
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: var(--r8);
+    border: 1px solid var(--dove);
+    cursor: zoom-in;
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      opacity: 0.92;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: var(--dove);
+    margin: 24px 0;
+  }
+
+  sup a,
+  .footnote-ref a {
+    text-decoration: none;
+  }
+}
+
+// inline code
+.g-prose :not(pre) > code {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  font-size: 13px;
+  background: var(--nim);
+  border-radius: 6px;
+  padding: 2px 6px;
+  color: var(--ink);
+}
+
+// code blocks
+.g-prose pre {
+  background: var(--card);
+  border: 1px solid var(--dove);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+      'Liberation Mono', monospace;
+    color: var(--body);
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+  }
+}
+
+// copy-code button inside pre
+.g-prose .copy-code-button {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.g-prose pre:hover .copy-code-button {
+  opacity: 1;
+}
+
+// ---------------------------------------------------------------------------
+// custom containers
+// ---------------------------------------------------------------------------
+.g-source {
+  background: var(--ivory);
+  border: 1px solid var(--dove);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 0 0 24px;
+
+  strong {
+    display: block;
+    font-size: 12.5px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 12.5px;
+    font-family: var(--inter);
+    line-height: 1.55;
+    color: var(--mut);
+  }
+
+  a {
+    color: var(--mut);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+.g-approval {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--amber);
+  border: 1px solid var(--amber-b);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 14px 0;
+
+  .chip {
+    flex-shrink: 0;
+    background: #F5E6C8;
+    color: var(--amber-t);
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--amber-t);
+  }
+
+  > div {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.g-todo {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--ivory);
+  border: 1px dashed var(--dove);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 14px 0;
+
+  .chip {
+    flex-shrink: 0;
+    background: var(--nim);
+    color: var(--fog);
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--mut);
+  }
+
+  > div {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.g-example {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 16px 0;
+
+  .t {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--fog);
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--body);
+  }
+}
+
+.g-example > :not(.t) {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--body);
+}
+
+// code inside an example shares the card background — no inner border box,
+// wrap long lines instead of scrolling horizontally
+.g-prose .g-example pre {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 8px 0 0;
+  overflow-x: visible;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 13.5px;
+  line-height: 1.6;
+
+  code {
+    font-family: var(--mono);
+    font-size: inherit;
+    line-height: inherit;
+    white-space: inherit;
+    word-break: inherit;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// custom pages (home / lists), 404
+// ---------------------------------------------------------------------------
+.g-wrap--custom {
+  background: var(--page);
+}
+
+.g-placeholder {
+  width: 100%;
+  max-width: 1248px;
+  margin: 0 auto;
+  padding: 72px 24px 48px;
+
+  h1 {
+    font-size: 40px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+}
+
+.g-custom {
+  flex: 1;
+  width: 100%;
+}
+
+// shared content container — full bleed chrome, 1248px measure
+.g-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.g-notfound {
+  flex: 1;
+  padding: 96px 0 120px;
+}
+
+.g-notfound__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.g-notfound__code {
+  font-family: var(--inter);
+  font-size: 13px;
+  line-height: var(--lh-ui);
+  letter-spacing: var(--ls-eyebrow-doc);
+  font-weight: var(--fw-medium);
+  color: var(--fog);
+  margin: 0 0 16px;
+}
+
+.g-notfound__title {
+  margin: 0 0 16px;
+  font-size: var(--fs-display-m);
+  line-height: var(--lh-display-m);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-display);
+  color: var(--ink);
+}
+
+.g-notfound__desc {
+  margin: 0 0 32px;
+  max-width: 36em;
+  font-size: 16px;
+  line-height: var(--lh-lead);
+  color: var(--mut);
+}
+
+.g-notfound__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+// ---------------------------------------------------------------------------
+// misc
+// ---------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// click-to-zoom lightbox for .g-prose images
+.g-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(10, 10, 10, 0.72);
+  box-sizing: border-box;
+}
+
+.g-lightbox__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--dove);
+  border-radius: var(--r8);
+  background: #F7F6F3;
+  color: #0A0A0A;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  &:hover {
+    background: #FFFFFF;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0A0A0A;
+    outline-offset: 2px;
+  }
+}
+
+.g-lightbox__figure {
+  margin: 0;
+  max-width: min(100%, 100vw - 48px);
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.g-lightbox__img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 96px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--r16);
+  border: 1px solid var(--dove);
+  background: #FFFFFF;
+  cursor: default;
+}
+
+.g-lightbox__caption {
+  margin: 0;
+  max-width: 100%;
+  padding: 0 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #D5D9E4;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .g-lightbox {
+    padding: 16px;
+  }
+
+  .g-lightbox__close {
+    top: 12px;
+    right: 12px;
+  }
+
+  .g-lightbox__figure {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+  }
+
+  .g-lightbox__img {
+    max-height: calc(100vh - 80px);
+  }
+}
+
+// phone screenshots: narrow, centered, can sit side by side
+.g-prose .g-phones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 20px 0;
+
+  > p {
+    display: contents;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 16px;
+    border: 1px solid var(--dove);
+    box-shadow: none;
+  }
+
+  &.is-single img {
+    max-width: 340px;
+  }
+
+  img:hover {
+    box-shadow: none;
+  }
+}
+
+.g-prose .g-phones-cap {
+  margin: -8px 0 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--mut);
+}

@@ -1,0 +1,14 @@
+node_modules/
+docs/.vuepress/.cache/
+docs/.vuepress/.temp/
+docs/.vuepress/dist/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+dist/
+.pnpm-store/
+_facts/
+.ref/
+.deploy/
